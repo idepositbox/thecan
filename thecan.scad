@@ -1,6 +1,6 @@
 
 $fn = 100;
-$fa = 360;
+$fa = 720;
 height=140;
 width=60;
 cut_angle=25;
@@ -49,12 +49,12 @@ for (i=[4,8]) {
 module alloy_cylinder() {
 	difference() {
 		difference() {
-				cylinder(r=width/2+1,h=height,center=true);
-				cylinder(r=width/2,h=height+1,center=true);
+				cylinder(r=width/2+2,h=height,center=true);
+				cylinder(r=width/2+1,h=height+1,center=true);
 		}
 	
 	//hole for power/net connectors
-	translate([width/2-1,0,-(height/2)+9]) cube([7,30,20], center=true);
+	translate([width/2-2,0,-(height/2)+9]) cube([10,30,20], center=true);
 	// top cut
 	translate([width/2,0,(height/2)+50]) rotate(a=cut_angle, v=[0,-1,0]) 
 		cube([300,width+10,100], center=true);
@@ -64,8 +64,8 @@ module alloy_cylinder() {
 
 module motherboard() {
 color("green")
-#	translate([0,0,0])
-		cube([2, mb_w, mb_h], center=true);
+	translate([0,0,-10])
+		cube([2, width-4, height-31], center=true);
 	translate([-5,0,height/2-32]) usb();
 	translate([2,0,5]) color("black")
 		cube([2, 20, 20], center=true);
@@ -90,6 +90,7 @@ module pcb_power() {
 
 }
 module powerboard() {
+
 	// bottom cap
 		translate([0,0,-height/2]) cylinder(r=width/2,h=5,center=true);
 		translate([0,0,-height/2-1]) cylinder(r=width/2+2,h=3,center=true);
@@ -124,8 +125,8 @@ module cap()
 // bezel
 difference(){
 	union() {
-	translate([-3,0,height/2-22]) cube([20,16,10], center=true);
-	rotate(a=cut_angle,v=[0,-1,0]) translate([12,0,height/2-28]) cube([25,27,8], center=true);
+	translate([-3,0,height/2-22]) cube([20,18,10], center=true);
+	rotate(a=cut_angle,v=[0,-1,0]) translate([16,0,height/2-28]) cube([25,27,8], center=true);
 	}
 	translate([-7,0,height/2-20]) cube([25,20,10], center=true);
 	translate ([-5,0,height/2-20]) cube([6,13.3,50], center=true);
@@ -146,7 +147,7 @@ difference() {
 		cube([300,width+10,100], center=true);
 	translate([0,0,(height/2)-43]) rotate(a=cut_angle, v=[0,-1,0]) 
 		cube([100,width+10,30], center=true);
-    translate([-7,0,height/2-20]) cube([25,17,10], center=true);
+    translate([-7,0,height/2-20]) cube([25,22,10], center=true);
 	translate ([-5,0,height/2-20]) cube([9,13.3,50], center=true);
 
 
@@ -155,13 +156,20 @@ difference() {
 
 }
 
+module eoma68()
+{
+color("blue")
+	translate([3,0,-5])
+		cube([5, mb_w, mb_h], center=true);
+}
 ///
 ///
 
 //
 color("silver", 0.75) alloy_cylinder();
 
-//motherboard();
-//powerboard();
-//pcb_power();
+motherboard();
+powerboard();
+pcb_power();
+eoma68();
 cap();
